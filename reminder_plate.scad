@@ -16,10 +16,13 @@ plate_thickness=3;
 base_colour="white";
 contrast_colour="black";
 
+font_padding_factor = 0.6;
 date_font_height=plate_width/14;
 date_font="DejaVu Sans Mono:style=Bold";
 month_font_height=plate_width/14;
 month_font="DejaVu Sans Mono:style=Bold";
+description_font_height=plate_width/14;
+description_font="DejaVu Sans Mono:style=Bold";
 
 // Dymo labels are 12mm wide:
 label_slot_height = 15;
@@ -27,6 +30,7 @@ label_slot_height = 15;
 
 month_labels=["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
 date_labels=["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"];
+description_labels=["This is to ", "be done at", "least by:"];
 
 ////////////////////////////////////////////////////////
 //            less-tinkerable parameters:             //
@@ -134,11 +138,32 @@ module top_plate()
 
   grip_slot_diam = 1.3*monthwheel_grip_diam;
   grip_slot_upper_diam = 1.2*grip_slot_diam;
-  color(base_colour) {
-    difference() {
-      cube ([plate_width,plate_depth,top_plate_height]);
-      union()
-      {
+  difference() {
+    union()
+    {
+      color(base_colour) {
+        cube ([plate_width,plate_depth,top_plate_height]);
+      }
+      color(contrast_colour) {
+        translate([
+            plate_width/2,
+            datewheel_diam/2+2*datewheel_extra_clearance+grip_slot_upper_diam/2+font_padding_factor*description_font_height,
+            top_plate_height
+        ]) {
+          for (i = [0:len(description_labels)])
+          {
+            translate([0,(len(description_labels)-i-1)*(1+font_padding_factor)*description_font_height,0])
+            {
+              linear_extrude(height=font_height_proportion*wheel_thickness)
+                text(description_labels[i],size=description_font_height,font=description_font, halign="center",$fn=10);
+            }
+          }
+        }
+      }
+    }
+    union()
+    {
+      color(base_colour) {
         translate([
             0,
             datewheel_diam/2+2*datewheel_extra_clearance-date_slot_depth/2,
@@ -155,26 +180,14 @@ module top_plate()
             datewheel_diam/2+2*datewheel_extra_clearance,
             -0.1*top_plate_height])
           cylinder(r1=grip_slot_diam/2,r2=grip_slot_upper_diam/2,h=1.2*top_plate_height,$fa=5);
-
-        translate([
-            label_margin,
-            datewheel_diam/2+2*datewheel_extra_clearance+grip_slot_upper_diam/2+label_margin,
-            //plate_depth-label_margin-label_slot_height,
-            0.5*top_plate_height])
-        {
-          cube([
-              plate_width-2*label_margin,
-              label_slot_height,
-              top_plate_height]);
-        }
-
-        // Place pegs:
-        translate([0,0,-0.01])
-          for (pos = peg_pos) {
-            translate(pos)
-              cylinder(r=peg_diam/2+peg_diam_extra_clearance,h=peg_height_holeside_factor*peg_height,$fs=0.5);
-          }
       }
+
+      // Place pegs:
+      translate([0,0,-0.01])
+        for (pos = peg_pos) {
+          translate(pos)
+            cylinder(r=peg_diam/2+peg_diam_extra_clearance,h=peg_height_holeside_factor*peg_height,$fs=0.5);
+        }
     }
   }
 }

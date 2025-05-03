@@ -80,15 +80,6 @@ monthwheel_spacing_inner_diam=monthwheel_spacing_outer_diam-plate_width/10;
 monthwheel_diam=monthwheel_spacing_inner_diam-2*monthwheel_extra_clearance;
 monthwheel_grip_diam=monthwheel_diam/3;
 
-module waste_block()
-{
-  color(base_colour)
-    cube([15,15,(1-font_height_proportion)*wheel_thickness]);
-  translate([0,0,(1-font_height_proportion)*wheel_thickness])
-    color(contrast_colour)
-    cube([15,15,font_height_proportion*wheel_thickness]);
-}
-
 module base_plate()
 {
   // the plate that mounts onto things
@@ -273,9 +264,6 @@ module render_composition ()
 
 module render_explosion_view ()
 {
-  translate([-20,0,0])
-    waste_block();
-
   base_plate();
   translate([0,0,20*base_plate_height])
     //translate([0,0,base_plate_height])
@@ -298,8 +286,6 @@ if ("composition" == render_part) {
   render_explosion_view();
 } else if ("base_plate" == render_part) {
   base_plate();
-} else if ("waste_block" == render_part) {
-  waste_block();
 } else if ("top_plate" == render_part) {
   top_plate();
 } else if ("date_wheel" == render_part) {

@@ -4,7 +4,6 @@
 .PHONY: all_parts clean
 
 all_parts: reminder_plate-part-month_wheel.stl \
-  reminder_plate-part-waste_block.stl \
   reminder_plate-part-date_wheel.stl \
   reminder_plate-part-base_plate.stl \
   reminder_plate-part-top_plate.stl

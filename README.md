@@ -15,7 +15,7 @@ It has a cut-out for attaching a label to it. I might produce a printable insert
 
 Print in at least two passes: the top and bottom plate can be printed in a single colour, and the wheels can be printed together.
 
-The wheels are meant to be printable on a one-colour printer, but you'll have to change filament at the right time. To that effect, it is useful to put a waste block next to the print---one is included here.
+The wheels are meant to be printable on a one-colour printer, but you'll have to change filament at the right time. Use your slicer's ability to insert filament changes and manually purge between colours.
 
 
 ## Customisability

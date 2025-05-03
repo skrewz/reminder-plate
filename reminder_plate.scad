@@ -9,6 +9,7 @@ render_part="explosion_view";
 // Dimensions as while lying down
 plate_width=60;
 plate_depth=70;
+plate_rounding_r=3;
 // Total thickness
 plate_thickness=3;
 
@@ -84,6 +85,18 @@ monthwheel_spacing_inner_diam=monthwheel_spacing_outer_diam-plate_width/10;
 monthwheel_diam=monthwheel_spacing_inner_diam-2*monthwheel_extra_clearance;
 monthwheel_grip_diam=monthwheel_diam/3;
 
+module rounded_cube(wdh)
+{
+  minkowski()
+  {
+    translate([plate_rounding_r,plate_rounding_r,0])
+    {
+      cube ([wdh[0]-2*plate_rounding_r,wdh[1]-2*plate_rounding_r,wdh[2]]);
+    }
+    cylinder(r=plate_rounding_r, h=0.01, $fs=plate_rounding_r/5);
+  }
+}
+
 module base_plate()
 {
   // the plate that mounts onto things
@@ -93,7 +106,7 @@ module base_plate()
 
   color(base_colour) {
     difference() {
-      cube ([plate_width,plate_depth,base_plate_height]);
+      rounded_cube([plate_width,plate_depth,base_plate_height]);
       union()
       {
         translate([plate_width/2,datewheel_diam/2+2*datewheel_extra_clearance,layer_thickness])
@@ -142,7 +155,7 @@ module top_plate()
     union()
     {
       color(base_colour) {
-        cube ([plate_width,plate_depth,top_plate_height]);
+        rounded_cube ([plate_width,plate_depth,top_plate_height]);
       }
       color(contrast_colour) {
         translate([

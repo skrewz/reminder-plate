@@ -249,7 +249,7 @@ module month_wheel()
     }
   }
 
-  num_grip_points=6;
+  num_grip_points=4;
   for (i = [0 : 1 : num_grip_points]){
     rotate([0,0,i*360/num_grip_points])
       //translate([monthwheel_grip_diam/2,0,0])

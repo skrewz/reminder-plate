@@ -24,6 +24,8 @@ month_font_height=plate_width/14;
 month_font="DejaVu Sans Mono:style=Bold";
 description_font_height=plate_width/14;
 description_font="DejaVu Sans Mono:style=Bold";
+repetition_font_height=plate_width/18;
+repetition_font="DejaVu Sans Mono:style=Bold";
 
 // Dymo labels are 12mm wide:
 label_slot_height = 15;
@@ -31,7 +33,8 @@ label_slot_height = 15;
 
 month_labels=["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
 date_labels=["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"];
-description_labels=["This is to ", "be done at", "least by:"];
+description_labels=["This is to", "be done at", "least by:"];
+repetition_labels=["(Then on every", "third Friday", "of the month.)"];
 
 ////////////////////////////////////////////////////////
 //            less-tinkerable parameters:             //
@@ -158,6 +161,7 @@ module top_plate()
         rounded_cube ([plate_width,plate_depth,top_plate_height]);
       }
       color(contrast_colour) {
+        // Place description_labels:
         translate([
             plate_width/2,
             datewheel_diam/2+2*datewheel_extra_clearance+grip_slot_upper_diam/2+font_padding_factor*description_font_height,
@@ -169,6 +173,22 @@ module top_plate()
             {
               linear_extrude(height=font_height_proportion*wheel_thickness)
                 text(description_labels[i],size=description_font_height,font=description_font, halign="center",$fn=10);
+            }
+          }
+        }
+
+        // Place repetition_labels::
+        translate([
+            plate_width/2,
+            datewheel_diam/2-2*datewheel_extra_clearance-grip_slot_upper_diam/2-font_padding_factor*description_font_height,
+            top_plate_height
+        ]) {
+          for (i = [0:len(repetition_labels)])
+          {
+            translate([0,-i*(1+font_padding_factor)*repetition_font_height,0])
+            {
+              linear_extrude(height=font_height_proportion*wheel_thickness)
+                text(repetition_labels[i],size=repetition_font_height,font=repetition_font, halign="center",$fn=10);
             }
           }
         }
